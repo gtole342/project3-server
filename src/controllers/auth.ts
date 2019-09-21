@@ -64,7 +64,7 @@ router.post("/signup", (req, res) => {
 });
 
 router.post("/current/user", (req: any, res) => {
-  console.log(req)
+  console.log(req.user)
   if (!req.user || !req.user._id) {
     return res.status(417).send({ message: "Check configuration" });
   }
