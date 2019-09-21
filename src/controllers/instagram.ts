@@ -8,7 +8,7 @@ import { User } from "../models";
 const router = express.Router();
 dotenv.config();
 
-const accessToken = "EAAHEmPLN9ZAYBAEP1gGFqmNImgsFY5RrKUMCgb0xUjBC30YVBOz4UAXlxgGn4YoQZADjM8ZBApyvlgtWKz29iTbwvIGhhbkPZASt4WjyyKLY8CQXuGmrTLmLoJKj1d4UH0lwboZBwm29eT9Cro53ZACGnFVyYquaIEoeRZAyZBT90AaHOufT8RqJOaQWZBkLX0ZBB2x7AM7y55DU3adcK7uL8H";
+let accessToken = "";
 const BASE_URL = "https://graph.facebook.com/v4.0/";
 
 const getAppSecretProof = (token: string, appSecret: string): string => {
@@ -34,6 +34,7 @@ const getOneInstagramPost = async (req, res) => {
       console.log(err, "Error getting User");
     });
   if (user) {
+    accessToken = user.vendor.instagramAccessToken;
     let appSecretProof: string = "";
     if (process.env.APP_SECRET) {
       appSecretProof = getAppSecretProof(accessToken, process.env.APP_SECRET);

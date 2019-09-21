@@ -41,6 +41,9 @@ router.post("/signup", (req, res) => {
       firstname: req.body.firstname,
       lastname: req.body.lastname,
       password: req.body.password,
+      vendor: {
+        instagramAccessToken: req.body.instagramAccessToken,
+      },
     })
     .then((newUser) => {
       console.log("Making it here");
