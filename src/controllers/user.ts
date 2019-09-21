@@ -69,7 +69,7 @@ router.delete("/:id/favoriteArtists/remove", (req, res) => {
         console.log(faves);
         console.log(itemIndex);
         user.updateOne({
-          favoriteWorks: faves,
+          favoriteArtists: faves,
         })
         .then((result) => {
           res.status(200).send(result);
