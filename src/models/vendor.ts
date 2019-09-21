@@ -49,6 +49,7 @@ VendorSchema.pre<IVendorModel>("save", async function(next) {
     const instagramIdPageUrl = `https://graph.facebook.com/v4.0/${[pageId]}?fields=instagram_business_account&access_token=${this.instagramAccessToken}`;
     await axios.get(instagramIdPageUrl)
     .then((response) => {
+      console.log("instagramIdPage", response.data.instagram_business_account.id)
       this.instagramIdPage = response.data.instagram_business_account.id;
     })
     .catch((err) => {
