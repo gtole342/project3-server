@@ -214,7 +214,7 @@ router.delete("/:id/pinned/remove", (req, res) => {
   .then((user) => {
     if (user) {
       const pins: string[] = user.vendor.pinned;
-      const item: string = req.body.removePost;
+      const item: string = req.body.postId;
       const itemIndex: number = pins.indexOf(item);
       if (itemIndex > -1) {
         pins.splice(itemIndex, 1);
