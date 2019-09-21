@@ -21,7 +21,7 @@ const makeApiCall = async (url: string, errorMessage: string, callback: any) => 
     return callback(response);
   })
   .catch((err) => {
-    console.log(errorMessage);
+    console.log(errorMessage, err);
   });
 };
 
