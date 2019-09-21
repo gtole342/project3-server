@@ -109,7 +109,10 @@ router.post("/:id/favoriteWorks/add", (req, res) => {
   .then((user) => {
     if (user) {
       const faves: [{ artistId: string, postId: string }] = user.favoriteWorks;
-      faves.push(req.body.newFave);
+      faves.push({
+        artistId: req.body.artistId,
+        postId: req.body.postId,
+      });
       user.updateOne({
         favoriteWorks: faves,
       })
