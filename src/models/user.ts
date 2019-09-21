@@ -10,7 +10,7 @@ export interface IUserModel extends Document{
   lastname: string;
   password: string;
   vendor: IVendorModel;
-  isAuthenticated(): boolean;
+  isAuthenticated(typedPassword: string): boolean;
 }
 
 export const UserSchema = new Schema({
