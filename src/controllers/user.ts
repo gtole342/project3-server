@@ -66,6 +66,7 @@ router.delete("/:id/favoriteArtists/remove", (req, res) => {
       const itemIndex: number = faves.indexOf(item);
       if (itemIndex > -1) {
         faves.splice(itemIndex, 1);
+        console.log(faves);
         user.updateOne({
           favoriteWorks: faves,
         })
