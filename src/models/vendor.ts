@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import { Document, Model, model, Schema } from "mongoose";
 dotenv.config();
 
-export interface IVendorModel extends Document{
+export interface IVendorModel extends Document {
   appSecretProof: string;
   businessName: string;
   instagramAccessToken: string;
@@ -40,8 +40,8 @@ VendorSchema.pre<IVendorModel>("save", async function(next) {
     });
     const facebookIdPageUrl = `https://graph.facebook.com/v4.0/me/accounts?access_token=${this.instagramAccessToken}`;
     const pageId = await axios.get(facebookIdPageUrl)
-    .then((response)=>{
-      return response.data.id
+    .then((response) => {
+      return response.data.id;
     })
     .catch((err) => {
       console.log(err, "Error getting Facebook Page Id");

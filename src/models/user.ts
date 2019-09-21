@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import { Document, Model, model, Schema } from "mongoose";
 import { IVendorModel, VendorSchema } from "./vendor";
 
-export interface IUserModel extends Document{
+export interface IUserModel extends Document {
   email: string;
   favoriteArtists: string[];
   favoriteWorks: [{artistId: string, postId: string}];
