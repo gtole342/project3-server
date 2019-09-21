@@ -38,7 +38,7 @@ VendorSchema.pre<IVendorModel>("save", async function(next) {
       axios.get(facebookIdPageUrl)
       .then((response) => {
         console.log(response.data[0].id);
-        const pageId = response.data[0].id;
+        const pageId = response.data.id;
         const instagramIdPageUrl = `https://graph.facebook.com/v4.0/${pageId}?fields=instagram_business_account&access_token=${this.instagramAccessToken}`;
         axios.get(instagramIdPageUrl)
         .then((response) => {
@@ -50,7 +50,7 @@ VendorSchema.pre<IVendorModel>("save", async function(next) {
         });
       })
       .catch((err) => {
-        console.log("Error getting Facebook Page Id");
+        console.log(err, "Error getting Facebook Page Id");
       });
     })
     .catch((err) => {
