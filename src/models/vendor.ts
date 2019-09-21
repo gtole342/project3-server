@@ -45,11 +45,11 @@ VendorSchema.pre<IVendorModel>("save", async function(next) {
           this.instagramIdPage = response.data.instagram_business_account.id;
         })
         .catch((err) => {
-          console.log("Error getting Instagram Page Id");
+          console.log(err, "Error getting Instagram Page Id");
         });
       })
       .catch((err) => {
-        console.log(err, "Error getting Facebook Page Id");
+        console.log("Error getting Facebook Page Id");
       });
     })
     .catch((err) => {
