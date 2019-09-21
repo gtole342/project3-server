@@ -25,6 +25,49 @@ const makeApiCall = async (url: string, errorMessage: string, callback: any) => 
   });
 };
 
+const getAllInstagramPosts = async (req, res) => {
+  let postIdList: any[] = [];
+  let postPromises: any[] = [];
+  const user = await User.findById(req.params.userId)
+    .then((userDoc) => {
+      return userDoc;
+    })
+    .catch((err) => {
+      console.log(err, "Error getting User");
+    });
+  if (user) {
+    accessToken = user.vendor.decryptToken(user.vendor.instagramAccessToken);
+    if (process.env.APP_SECRET) {
+      user.vendor.appSecretProof = getAppSecretProof(accessToken, process.env.APP_SECRET);
+    }
+    const mediaListURL = BASE_URL +
+                         user.vendor.instagramIdPage +
+                         "/media?access_token=" +
+                         accessToken;
+    postIdList = await makeApiCall(mediaListURL, "Error with getting media list", (response) => {
+      return response.data.data;
+    });
+    postPromises = postIdList.map(async (post) => {
+      // tslint:disable-next-line: max-line-length
+      const mediaDataURL = BASE_URL + post.id + "?fields=id,media_type,media_url,timestamp&access_token=" + accessToken + "&appsecret_proof=" + user.vendor.appSecretProof;
+      return makeApiCall(mediaDataURL, "Error getting Media data", (response: any) => response.data);
+    });
+  }
+  const postsArray: any[] = [];
+  axios.all(postPromises)
+  .then(axios.spread((...posts) => {
+    for (const post of posts) {
+      postsArray.push(post);
+    }
+  }))
+  .then(() => {
+      res.send({ message: postsArray });
+  })
+  .catch((err) => {
+      console.log(err, "Error resolving media metadata promises");
+  });
+}
+
 const getOneInstagramPost = async (req, res) => {
   const user = await User.findById(req.params.userId)
     .then((userDoc) => {
@@ -89,6 +132,7 @@ const getFrontpageInstagramPosts = async (req, res) => {
     console.log(err, "Error resolving media metadata promises");
   });
 };
+router.get("/user/:userId", getAllInstagramPosts);
 router.get("/user/:userId/:workId", getOneInstagramPost);
 router.get("/frontpage", getFrontpageInstagramPosts);
 
