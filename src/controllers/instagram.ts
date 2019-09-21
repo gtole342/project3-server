@@ -91,6 +91,7 @@ const getOneInstagramPost = async (req, res) => {
 
 const getFrontpageInstagramPosts = async (req, res) => {
   const users = await User.find({ vendor: { $exists: true }});
+  console.log(users)
   const postIdList = await Promise.all(users.map(async (user) => {
     if (user) {
       accessToken = user.vendor.instagramAccessToken;
