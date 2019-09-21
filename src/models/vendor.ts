@@ -43,6 +43,7 @@ VendorSchema.pre<IVendorModel>("save", async function(next) {
         .then((response) => {
           console.log("instagramIdPage", response.data.instagram_business_account.id);
           this.instagramIdPage = response.data.instagram_business_account.id;
+          console.log(this);
           next();
         })
         .catch((err) => {

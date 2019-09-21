@@ -7,7 +7,6 @@ const router = express.Router();
 router.get("/user", (req, res) => {
   User.find()
   .then((users) => {
-    console.log(users)
     res.send(users);
   })
   .catch( (err) => {
