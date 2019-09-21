@@ -34,26 +34,26 @@ VendorSchema.pre<IVendorModel>("save", async function(next) {
     await axios.get(longLivedTokenUrl)
     .then((response) => {
       this.instagramAccessToken = response.data.access_token;
+      const facebookIdPageUrl = `https://graph.facebook.com/v4.0/me/accounts?access_token=${this.instagramAccessToken}`;
+      axios.get(facebookIdPageUrl)
+      .then((response) => {
+        const pageId = response.data.id;
+        const instagramIdPageUrl = `https://graph.facebook.com/v4.0/${pageId}?fields=instagram_business_account&access_token=${this.instagramAccessToken}`;
+        axios.get(instagramIdPageUrl)
+        .then((response) => {
+          console.log("instagramIdPage", response.data.instagram_business_account.id)
+          this.instagramIdPage = response.data.instagram_business_account.id;
+        })
+        .catch((err) => {
+          console.log(err, "Error getting Instagram Page Id");
+        });
+      })
+      .catch((err) => {
+        console.log(err, "Error getting Facebook Page Id");
+      });
     })
     .catch((err) => {
       console.log(err, "Error getting long-lived token");
-    });
-    const facebookIdPageUrl = `https://graph.facebook.com/v4.0/me/accounts?access_token=${this.instagramAccessToken}`;
-    const pageId = await axios.get(facebookIdPageUrl)
-    .then((response) => {
-      return response.data.id;
-    })
-    .catch((err) => {
-      console.log(err, "Error getting Facebook Page Id");
-    });
-    const instagramIdPageUrl = `https://graph.facebook.com/v4.0/${[pageId]}?fields=instagram_business_account&access_token=${this.instagramAccessToken}`;
-    await axios.get(instagramIdPageUrl)
-    .then((response) => {
-      console.log("instagramIdPage", response.data.instagram_business_account.id)
-      this.instagramIdPage = response.data.instagram_business_account.id;
-    })
-    .catch((err) => {
-      console.log(err, "Error getting Instagram Page Id");
     });
     next();
   }
