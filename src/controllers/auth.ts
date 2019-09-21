@@ -46,7 +46,7 @@ router.post("/signup", (req, res) => {
       },
     })
     .then((newUser) => {
-      console.log(newUser);
+      console.log(newUser," new user");
       const token = jwt.sign(newUser.toJSON(), process.env.JWT_SECRET || "", {
         expiresIn: 60 * 60 * 8,
       });
