@@ -14,6 +14,17 @@ router.get("/users", (req, res) => {
       res.status(503).send({ message: "Error! Can't get anything from the db" });
     });
 });
+// DELETE /v1/users (delete all)
+router.delete("/", (req, res) => {
+  User.deleteMany({})
+  .then(() => {
+    res.send({ message: "Deleted all records" });
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(503).send({ message: "Server error while deleting" });
+  });
+});
 
 // GET FAVORITE ARTISTS /v1/users/favoriteArtists
 router.get("/:id/favoriteArtists", (req, res) => {
@@ -211,34 +222,34 @@ router.post("/:id/pinned/add", (req, res) => {
 // DELETE PINNED /v1/users/:id/pinned/remove
 router.delete("/:id/pinned/remove", (req, res) => {
   User.findById(req.params.id)
-  .then((user) => {
-    if (user) {
-      const pins: string[] = user.vendor.pinned;
-      const item: string = req.body.postId;
-      const itemIndex: number = pins.indexOf(item);
-      if (itemIndex > -1) {
-        pins.splice(itemIndex, 1);
-        user.updateOne({
-          vendor: {
-            pinned: pins,
-          },
-        })
-          .then((result) => {
-            res.status(200).send(result);
+    .then((user) => {
+      if (user) {
+        const pins: string[] = user.vendor.pinned;
+        const item: string = req.body.postId;
+        const itemIndex: number = pins.indexOf(item);
+        if (itemIndex > -1) {
+          pins.splice(itemIndex, 1);
+          user.updateOne({
+            vendor: {
+              pinned: pins,
+            },
           })
-          .catch((err) => {
-            console.log(err);
-            res.status(500).send({ message: "Server error while attempting to add a favorite" });
-          });
-      } else {
-        res.status(500).send({ message: "Couldn't find favorite to remove" });
+            .then((result) => {
+              res.status(200).send(result);
+            })
+            .catch((err) => {
+              console.log(err);
+              res.status(500).send({ message: "Server error while attempting to add a favorite" });
+            });
+        } else {
+          res.status(500).send({ message: "Couldn't find favorite to remove" });
+        }
       }
-    }
-  })
-  .catch((err) => {
-    console.log(err);
-    res.status(500).send({ message: "Server error while attempting to find a user" });
-  });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send({ message: "Server error while attempting to find a user" });
+    });
 });
 
 export default router;
