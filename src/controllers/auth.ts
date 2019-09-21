@@ -16,7 +16,7 @@ router.post("/login", (req, res) => {
     if ( !user.isAuthenticated(req.body.password)) {
       return res.status(406).send({ message: "Not Acceptable: Invalid Credentials!"});
     }
-    const token = jwt.sign(user.toJSON(), "thisIsASecret", {
+    const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET || "", {
       expiresIn: 60 * 60 * 8,
     });
     res.send({ token });
@@ -64,7 +64,7 @@ router.post("/signup", (req, res) => {
 });
 
 router.post("/current/user", (req: any, res) => {
-  console.log(req.user)
+  console.log(req.user);
   if (!req.user || !req.user._id) {
     return res.status(417).send({ message: "Check configuration" });
   }

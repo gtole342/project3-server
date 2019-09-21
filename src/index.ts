@@ -15,7 +15,7 @@ app.use(cors());
 dotenv.config();
 
 app.use("/v1/auth", expressJwt({
-  secret: "thisIsASecret",
+  secret: process.env.JWT_SECRET || "",
 }).unless({
   path: [
     { url: "/v1/auth/login", methods: ["POST"]},
