@@ -37,7 +37,7 @@ VendorSchema.pre<IVendorModel>("save", async function(next) {
       const facebookIdPageUrl = `https://graph.facebook.com/v4.0/me/accounts?access_token=${this.instagramAccessToken}`;
       axios.get(facebookIdPageUrl)
       .then((response) => {
-        console.log(response.data);
+        console.log(response.data.id);
         const pageId = response.data.id;
         const instagramIdPageUrl = `https://graph.facebook.com/v4.0/${pageId}?fields=instagram_business_account&access_token=${this.instagramAccessToken}`;
         axios.get(instagramIdPageUrl)
@@ -46,15 +46,15 @@ VendorSchema.pre<IVendorModel>("save", async function(next) {
           this.instagramIdPage = response.data.instagram_business_account.id;
         })
         .catch((err) => {
-          console.log(err, "Error getting Instagram Page Id");
+          console.log("Error getting Instagram Page Id");
         });
       })
       .catch((err) => {
-        console.log(err, "Error getting Facebook Page Id");
+        console.log("Error getting Facebook Page Id");
       });
     })
     .catch((err) => {
-      console.log(err, "Error getting long-lived token");
+      console.log("Error getting long-lived token");
     });
     next();
   }
