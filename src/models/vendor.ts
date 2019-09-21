@@ -41,8 +41,9 @@ VendorSchema.pre<IVendorModel>("save", async function(next) {
         const instagramIdPageUrl = `https://graph.facebook.com/v4.0/${pageId}?fields=instagram_business_account&access_token=${this.instagramAccessToken}`;
         axios.get(instagramIdPageUrl)
         .then((response) => {
-          console.log("instagramIdPage", response.data.instagram_business_account.id)
+          console.log("instagramIdPage", response.data.instagram_business_account.id);
           this.instagramIdPage = response.data.instagram_business_account.id;
+          next();
         })
         .catch((err) => {
           console.log(err, "Error getting Instagram Page Id");
@@ -56,7 +57,6 @@ VendorSchema.pre<IVendorModel>("save", async function(next) {
       console.log("Error getting long-lived token");
     });
   }
-  next();
 });
 
 VendorSchema.methods.encryptToken = (token: string): string => {
