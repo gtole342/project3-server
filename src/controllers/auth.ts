@@ -28,6 +28,7 @@ router.post("/login", (req, res) => {
 });
 
 router.post("/signup", (req, res) => {
+  console.log("Getting here");
   User.findOne({
     email: req.body.email,
   })
