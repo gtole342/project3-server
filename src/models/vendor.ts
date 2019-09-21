@@ -18,7 +18,6 @@ export interface IVendorModel extends Document{
 }
 
 export const VendorSchema: Schema = new Schema({
-  address: AddressSchema,
   appSecretProof: String,
   businessName: String,
   instagramAccessToken: String,
