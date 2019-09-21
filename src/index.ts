@@ -16,7 +16,7 @@ dotenv.config();
 
 app.use("/v1/auth", auth);
 app.use("/v1/instagram", instagram);
-app.use("/v1/user", user);
+app.use("/v1/users", user);
 
 app.get("*", (req, res) => {
   res.status(404).send({ message: "Resource not found" });
