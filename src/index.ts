@@ -14,7 +14,14 @@ app.use(express.json());
 app.use(cors());
 dotenv.config();
 
-app.use("/v1/auth", auth);
+app.use("/v1/auth", expressJwt({
+  secret: "thisIsASecret",
+}).unless({
+  path: [
+    { url: "/v1/auth/login", methods: ["POST"]},
+    { url: "/v1/auth/signup", methods: ["POST"]},
+  ],
+}), auth);
 app.use("/v1/instagram", instagram);
 app.use("/v1/users", user);
 
