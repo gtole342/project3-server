@@ -46,7 +46,7 @@ router.post("/signup", (req, res) => {
       },
     })
     .then((newUser) => {
-      console.log(newUser," new user");
+      console.log(newUser, "new user");
       const token = jwt.sign(newUser.toJSON(), process.env.JWT_SECRET || "", {
         expiresIn: 60 * 60 * 8,
       });
@@ -64,6 +64,7 @@ router.post("/signup", (req, res) => {
 });
 
 router.post("/current/user", (req: any, res) => {
+  console.log(req)
   if (!req.user || !req.user._id) {
     return res.status(417).send({ message: "Check configuration" });
   }
