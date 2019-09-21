@@ -36,7 +36,7 @@ const getAllInstagramPosts = async (req, res) => {
       console.log(err, "Error getting User");
     });
   if (user) {
-    accessToken = user.vendor.decryptToken(user.vendor.instagramAccessToken);
+    accessToken = user.vendor.instagramAccessToken;
     if (process.env.APP_SECRET) {
       user.vendor.appSecretProof = getAppSecretProof(accessToken, process.env.APP_SECRET);
     }
