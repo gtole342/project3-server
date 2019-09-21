@@ -139,7 +139,7 @@ router.delete("/:id/favoriteWorks/remove", (req, res) => {
     .then((user) => {
       if (user) {
         const faves: [{ artistId: string, postId: string }] = user.favoriteWorks;
-        const item: string = req.body.removePost;
+        const item: string = req.body.postId;
         for (let i = 0; i < faves.length; i++) {
           if (faves[i].postId === item) {
             faves.splice(i, 1);
