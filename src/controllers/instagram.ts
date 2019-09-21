@@ -46,6 +46,50 @@ const getOneInstagramPost = async (req, res) => {
   }
 };
 
+const getFrontpageInstagramPosts = async (req, res) => {
+  const users = await User.find({ vendor: { $exists: true }});
+  const postIdList = await Promise.all(users.map(async (user) => {
+    if (user) {
+      accessToken = user.vendor.instagramAccessToken;
+      if (process.env.APP_SECRET) {
+        user.vendor.appSecretProof = getAppSecretProof(accessToken, process.env.APP_SECRET);
+      }
+      // tslint:disable-next-line: max-line-length
+      console.log(user.vendor)
+      const mediaIdUrl = BASE_URL + user.vendor.instagramIdPage + "/media?access_token=" + accessToken;
+      const postId = await makeApiCall(mediaIdUrl, "Error getting Media id", (response) => {
+        return response.data.data[0].id;
+      });
+      return {
+        accessToken: user.vendor.instagramAccessToken,
+        appSecretProof: user.vendor.appSecretProof,
+        postId,
+      };
+    }
+  }));
+  console.log(postIdList);
+  const postPromises = postIdList.map( async (post) => {
+    if (post) {
+      const mediaDataURL = BASE_URL + post.postId + "?fields=id,media_type,media_url,timestamp&access_token=" +
+                          post.accessToken + "&appsecret_proof=" + post.appSecretProof;
+      return makeApiCall(mediaDataURL, "Error getting Media data", (response) => response.data );
+    }
+  });
+  const postsArray: any[] = [];
+  axios.all(postPromises)
+  .then(axios.spread((...posts) => {
+    for (const post of posts) {
+      postsArray.push(post);
+    }
+  }))
+  .then(() => {
+    res.send({message: postsArray });
+  })
+  .catch((err) => {
+    console.log(err, "Error resolving media metadata promises");
+  });
+};
 router.get("/user/:userId/:workId", getOneInstagramPost);
+router.get("/frontpage", getFrontpageInstagramPosts);
 
 export default router;
