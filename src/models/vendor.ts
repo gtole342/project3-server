@@ -27,11 +27,11 @@ export const VendorSchema: Schema = new Schema({
   website: String,
 });
 
-VendorSchema.pre<IVendorModel>("save", async function(next) {
+VendorSchema.pre<IVendorModel>("save", function(next) {
   console.log(this.instagramAccessToken);
   if (process.env.APP_ID && process.env.APP_SECRET) {
     const longLivedTokenUrl = `https://graph.facebook.com/v4.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.APP_ID}&client_secret=${process.env.APP_SECRET}&fb_exchange_token=${this.instagramAccessToken}`;
-    await axios.get(longLivedTokenUrl)
+    axios.get(longLivedTokenUrl)
     .then((response) => {
       this.instagramAccessToken = response.data.access_token;
       const facebookIdPageUrl = `https://graph.facebook.com/v4.0/me/accounts?access_token=${this.instagramAccessToken}`;
