@@ -39,10 +39,24 @@ router.post("/signup", (req, res) => {
     User.create({
       email: req.body.email,
       firstname: req.body.firstname,
+      isVendor: req.body.isVendor,
       lastname: req.body.lastname,
       password: req.body.password,
       vendor: {
+        address: {
+          city: req.body.city,
+          country: req.body.country,
+          state: req.body.state,
+          street: req.body.street,
+          streetNumber: req.body.streetNumber,
+          streetSuffix: req.body.streetSuffix,
+          zipcode: req.body.zipcode,
+        },
+        businessName: req.body.businessName,
         instagramAccessToken: req.body.instagramAccessToken,
+        instagramIdPage: req.body.instagramIdPage,
+        phoneNumber: req.body.phoneNumber,
+        website: req.body.website,
       },
     })
     .then((newUser) => {

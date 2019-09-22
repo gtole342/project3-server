@@ -2,9 +2,11 @@ import axios from "axios";
 import crypto from "crypto";
 import dotenv from "dotenv";
 import { Document, Model, model, Schema } from "mongoose";
+import { AddressSchema, IAddressModel } from "./address";
 dotenv.config();
 
 export interface IVendorModel extends Document {
+  address: IAddressModel;
   appSecretProof: string;
   businessName: string;
   instagramAccessToken: string;
@@ -18,6 +20,7 @@ export interface IVendorModel extends Document {
 }
 
 export const VendorSchema: Schema = new Schema({
+  address: AddressSchema,
   appSecretProof: String,
   businessName: String,
   instagramAccessToken: String,

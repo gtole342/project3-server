@@ -7,6 +7,7 @@ export interface IUserModel extends Document {
   favoriteArtists: string[];
   favoriteWorks: [{artistId: string, postId: string}];
   firstname: string;
+  isVendor: boolean;
   lastname: string;
   password: string;
   vendor: IVendorModel;
@@ -32,6 +33,7 @@ export const UserSchema = new Schema({
     required: true,
     type: String,
   },
+  isVendor: Boolean,
   lastname: String,
   password: {
     maxlength: 32,
