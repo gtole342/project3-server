@@ -22,8 +22,14 @@ app.use("/v1/auth", expressJwt({
     { url: "/v1/auth/signup", methods: ["POST"]},
   ],
 }), auth);
-app.use("/v1/instagram", instagram);
-app.use("/v1/users", user);
+
+app.use("/v1/instagram", expressJwt({
+  secret: process.env.JWT_SECRET || "",
+}), instagram);
+
+app.use("/v1/users", expressJwt({
+  secret: process.env.JWT_SECRET || "",
+}), user);
 
 app.get("*", (req, res) => {
   res.status(404).send({ message: "Resource not found" });
