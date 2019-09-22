@@ -17,12 +17,28 @@ router.get("/users", (req, res) => {
 // DELETE /v1/users (delete all)
 router.delete("/", (req, res) => {
   User.deleteMany({})
-  .then(() => {
-    res.send({ message: "Deleted all records" });
+    .then(() => {
+      res.send({ message: "Deleted all records" });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(503).send({ message: "Server error while deleting" });
+    });
+});
+
+router.get("/:id", (req: any, res) => {
+  User.findById(req.params.id)
+  .then((user) => {
+    console.log(req.user);
+    if (user) {
+      res.send(user);
+    } else {
+      res.status(404).send({ message: "Resource not located" });
+    }
   })
   .catch((err) => {
     console.log(err);
-    res.status(503).send({ message: "Server error while deleting" });
+    res.status(503).send({ message: "ERROR finding user by id" });
   });
 });
 
