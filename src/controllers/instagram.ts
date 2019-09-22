@@ -108,6 +108,7 @@ const getFrontpageInstagramPosts = async (req, res) => {
         accessToken: user.vendor.instagramAccessToken,
         appSecretProof: user.vendor.appSecretProof,
         postId,
+        userId: user.id,
       };
     }
   }));
@@ -116,7 +117,11 @@ const getFrontpageInstagramPosts = async (req, res) => {
     if (post) {
       const mediaDataURL = BASE_URL + post.postId + "?fields=id,media_type,media_url,timestamp&access_token=" +
                           post.accessToken + "&appsecret_proof=" + post.appSecretProof;
-      return makeApiCall(mediaDataURL, "Error getting Media data", (response) => response.data );
+      return makeApiCall(mediaDataURL, "Error getting Media data", (response) => {
+        const data = response.data;
+        data.userId = post.userId;
+        return data;
+      });
     }
   });
   const postsArray: any[] = [];
