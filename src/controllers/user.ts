@@ -42,7 +42,7 @@ router.get("/:id", (req: any, res) => {
   });
 });
 
-// GET FAVORITE ARTISTS /v1/users/favoriteArtists
+
 router.get("/:id/favoriteArtists", (req, res) => {
   User.findById(req.params.id)
     .then((user) => {
