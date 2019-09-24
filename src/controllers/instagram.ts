@@ -128,11 +128,12 @@ const getFrontpageInstagramPosts = async (req, res) => {
   axios.all(postPromises)
   .then(axios.spread((...posts) => {
     for (const post of posts) {
-      postsArray.push(post);
+      if (post) {
+        postsArray.push(post);
+      }
     }
   }))
   .then(() => {
-    console.log(postsArray)
     res.send({message: postsArray });
   })
   .catch((err) => {
