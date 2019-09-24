@@ -132,6 +132,7 @@ const getFrontpageInstagramPosts = async (req, res) => {
     }
   }))
   .then(() => {
+    console.log(postsArray)
     res.send({message: postsArray });
   })
   .catch((err) => {
