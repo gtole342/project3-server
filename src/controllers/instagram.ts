@@ -82,7 +82,7 @@ const getOneInstagramPost = async (req, res) => {
     if (process.env.APP_SECRET) {
       appSecretProof = getAppSecretProof(accessToken, process.env.APP_SECRET);
     }
-    const url = BASE_URL + req.params.workId + "?fields=id,media_type,media_url,timestamp&access_token=" + accessToken + "&appsecret_proof=" + appSecretProof;
+    const url = BASE_URL + req.params.workId + "?fields=caption,id,media_type,media_url,permalink,timestamp,username&access_token=" + accessToken + "&appsecret_proof=" + appSecretProof;
     makeApiCall(url, "Error gettting media metadata", (response) => {
       res.send(response.data);
     });
