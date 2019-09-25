@@ -36,40 +36,61 @@ router.post("/signup", (req, res) => {
     if (user) {
       return res.status(409).send({ message: "Email address in use "});
     }
-    User.create({
-      email: req.body.email,
-      firstname: req.body.firstname,
-      isVendor: req.body.isVendor,
-      lastname: req.body.lastname,
-      password: req.body.password,
-      vendor: {
-        address: {
-          city: req.body.city,
-          country: req.body.country,
-          state: req.body.state,
-          street: req.body.street,
-          streetNumber: req.body.streetNumber,
-          streetSuffix: req.body.streetSuffix,
-          zipcode: req.body.zipcode,
+    if (req.body.isVendor) {
+      User.create({
+        email: req.body.email,
+        firstname: req.body.firstname,
+        isVendor: req.body.isVendor,
+        lastname: req.body.lastname,
+        password: req.body.password,
+        vendor: {
+          address: {
+            city: req.body.city,
+            country: req.body.country,
+            state: req.body.state,
+            street: req.body.street,
+            streetNumber: req.body.streetNumber,
+            streetSuffix: req.body.streetSuffix,
+            zipcode: req.body.zipcode,
+          },
+          businessName: req.body.businessName,
+          instagramAccessToken: req.body.instagramAccessToken,
+          instagramIdPage: req.body.instagramIdPage,
+          phoneNumber: req.body.phoneNumber,
+          website: req.body.website,
         },
-        businessName: req.body.businessName,
-        instagramAccessToken: req.body.instagramAccessToken,
-        instagramIdPage: req.body.instagramIdPage,
-        phoneNumber: req.body.phoneNumber,
-        website: req.body.website,
-      },
-    })
-    .then((newUser) => {
-      console.log(newUser, "new user");
-      const token = jwt.sign(newUser.toJSON(), process.env.JWT_SECRET || "", {
-        expiresIn: 60 * 60 * 8,
+      })
+      .then((newUser) => {
+        console.log(newUser, "new user");
+        const token = jwt.sign(newUser.toJSON(), process.env.JWT_SECRET || "", {
+          expiresIn: 60 * 60 * 8,
+        });
+        res.send({ token });
+      })
+      .catch((err) => {
+        console.log("Error when creating new user", err);
+        res.status(500).send({ message: "Error creating user"});
       });
-      res.send({ token });
-    })
-    .catch((err) => {
-      console.log("Error when creating new user", err);
-      res.status(500).send({ message: "Error creating user"});
-    });
+    } else {
+      User.create({
+        email: req.body.email,
+        firstname: req.body.firstname,
+        isVendor: req.body.isVendor,
+        lastname: req.body.lastname,
+        password: req.body.password,
+      })
+      .then((newUser) => {
+        console.log(newUser, "new user");
+        const token = jwt.sign(newUser.toJSON(), process.env.JWT_SECRET || "", {
+          expiresIn: 60 * 60 * 8,
+        });
+        res.send({ token });
+      })
+      .catch((err) => {
+        console.log("Error when creating new user", err);
+        res.status(500).send({ message: "Error creating user"});
+      });
+    }
   })
   .catch((err) => {
     console.log("Error in POST /auth/signup", err);

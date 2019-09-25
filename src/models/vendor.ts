@@ -31,7 +31,6 @@ export const VendorSchema: Schema = new Schema({
 });
 
 VendorSchema.pre<IVendorModel>("save", function(next) {
-  console.log(this.instagramAccessToken);
   if (process.env.APP_ID && process.env.APP_SECRET) {
     const longLivedTokenUrl = `https://graph.facebook.com/v4.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.APP_ID}&client_secret=${process.env.APP_SECRET}&fb_exchange_token=${this.instagramAccessToken}`;
     axios.get(longLivedTokenUrl)
